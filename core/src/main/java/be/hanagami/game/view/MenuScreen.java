@@ -3,6 +3,8 @@ package be.hanagami.game.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -15,13 +17,21 @@ import be.hanagami.game.Box2DTuto;
 
 public class MenuScreen implements Screen{
 
-    private final Stage stage;
     private Box2DTuto parent;
+    private Stage stage;
+    private Skin skin;
+    private TextureAtlas atlas;
+    private AtlasRegion background;
 
     public MenuScreen(Box2DTuto box2DTuto) {
         parent = box2DTuto;
-
         stage = new Stage(new ScreenViewport());
+
+        parent.assMan.queueAddSkin();
+        parent.assMan.manager.finishLoading();
+        skin = parent.assMan.manager.get("skin/glassy-ui.json");
+        atlas = parent.assMan.manager.get("images/loading.atlas");
+        background = atlas.findRegion("flamebackground");
     }
 
     @Override
@@ -33,7 +43,6 @@ public class MenuScreen implements Screen{
         table.setDebug(true);
         stage.addActor(table);
 
-        Skin skin = new Skin(Gdx.files.internal("assets/skin/glassy-ui.json"));
 
         TextButton newGame = new TextButton("New Game", skin);
         TextButton preferences = new TextButton("Preferences", skin);

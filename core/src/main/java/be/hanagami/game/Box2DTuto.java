@@ -1,7 +1,9 @@
 package be.hanagami.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.audio.Music;
 
+import be.hanagami.game.loader.B2dAssetManager;
 import be.hanagami.game.view.EndScreen;
 import be.hanagami.game.view.LoadingScreen;
 import be.hanagami.game.view.MainScreen;
@@ -20,12 +22,14 @@ public class Box2DTuto extends Game {
 
     private AppPreferences preferences;
 
+    public B2dAssetManager assMan = new B2dAssetManager();
 
 
     public final static int MENU = 0;
     public final static int PREFERENCES = 1;
     public final static int APPLICATION = 2;
     public final static int ENDGAME = 3;
+    private Music playingSong;
 
     public void changeScreen(int screen){
         switch (screen){
@@ -58,6 +62,11 @@ public class Box2DTuto extends Game {
         loadingScreen = new LoadingScreen(this);
         preferences = new AppPreferences();
         setScreen(loadingScreen);
+
+        assMan.queueAddMusic();
+        assMan.manager.finishLoading();
+        playingSong = assMan.manager.get("music/Rolemusic_-_pl4y1ng.mp3");
+        playingSong.play();
     }
 
 //    @Override
@@ -65,9 +74,10 @@ public class Box2DTuto extends Game {
 //        super.render();
 //    }
 
-//    @Override
-//    public void dispose() {
-//        super.dispose();
-//    }
+    @Override
+    public void dispose() {
+        playingSong.dispose();
+        assMan.manager.dispose();
+    }
 
 }
